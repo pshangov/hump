@@ -1,0 +1,30 @@
+class Foo::Bar;
+
+extends Foo;
+with Bar;
+
+load functions List::Util   [qw(bar baz)];
+load functions Data::Dumper qw(dump);
+load functions Path::Class  qw(file);
+load constants Wx           qw(WX_CREATE WX_DELETE WX_UPDATE);
+load types     My::Types    qw(Str Int Result);
+load module    My::Module;
+load class     DateTime::Format::Pg;
+load class     XML::Compile;
+load trait     MooseX::Trait::General;
+
+has Str name : ro required = 'Peter';
+has Int age  : ro required = 33;
+
+public method Result create (
+    Str !$source,
+    Str !$tareget,
+    Int  $attempts = 3,
+) : traits ('Transactional')
+    roles  (qw(create-resource delete-resource))
+{
+    my $result = file($source).copy_to($target);
+    return $result;
+}
+
+sub boom ($@) : bang { 2*2 }
